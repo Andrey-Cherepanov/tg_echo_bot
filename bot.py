@@ -4,7 +4,7 @@ from aiogram.types import Message
 
 API_TOKEN = ''
 with open('token.txt', 'r') as f:
-    API_TOKEN = f.readline()
+    API_TOKEN = f.readline().rstrip()
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
