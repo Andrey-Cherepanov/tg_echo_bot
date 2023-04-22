@@ -18,13 +18,12 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     await message.answer('Text me something, I\'ll echo your message')
 
-@dp.message(F.photo)
-async def send_photo_echo(message: Message):
-    await message.reply_photo(message.photo[0].file_id)
-
 @dp.message()
 async def send_echo(message):
-    await message.reply(text=message.text)
+    try:
+        await message.send_copy(chat_id=message.chat.id)
+    except:
+        await message.reply(text='This type is not mainteined')
 
 if __name__ == '__main__':
     dp.run_polling(bot)
