@@ -1,4 +1,4 @@
-from dataclassses import dataclass
+from dataclasses import dataclass
 from environs import Env
 
 @dataclass
