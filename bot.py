@@ -1,29 +1,18 @@
+import asyncio
 from aiogram import Bot, Dispatcher
-from aiogram.filters import Command
-from aiogram.types import Message
-from aiogram import F
 
-API_TOKEN = ''
-with open('token.txt', 'r') as f:
-    API_TOKEN = f.readline().rstrip()
+from config_data.config import Config, load_config
 
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher()
+async def main() -> None:
+    config: Config = load_config()
 
-@dp.message(Command(commands=['start']))
-async def process_start_command(message: Message):
-    await message.answer('Hi, I am Echo echo, text me something')
+    bot: Bot = Bot(token=config.tg_bot.token)
+    dp: Dispatcher = Dispatcher()
 
-@dp.message(Command(commands=['help']))
-async def process_help_command(message: Message):
-    await message.answer('Text me something, I\'ll echo your message')
-
-@dp.message()
-async def send_echo(message):
-    try:
-        await message.send_copy(chat_id=message.chat.id)
-    except:
-        await message.reply(text='This type is not mainteined')
+    # Пропускаем накопившиеся апдейты
+    await bot.delete_webhook(drop_pending_updates=True)
+    # Запускаем поллинг
+    await dp.run_polling(bot)
 
 if __name__ == '__main__':
-    dp.run_polling(bot)
+    asyncio.run(main())
